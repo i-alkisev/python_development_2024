@@ -1,6 +1,7 @@
 import argparse
 import random
 import urllib.request
+import cowsay
 
 
 def parse_argse():
@@ -37,7 +38,6 @@ def bullscows(guess: str, secret: str) -> tuple[int, int]:
 def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
     secret_idx = random.randrange(len(words))
     secret = words[secret_idx]
-    # print(f'[DEBUG] secret={secret}')
     guess = None
     guess_cnt = 0
     while True:
@@ -50,17 +50,26 @@ def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
     return guess_cnt
 
 
+def print_as_cow(message: str) -> None:
+    output = cowsay.cowsay(
+        message,
+        cow=cowsay.get_random_cow()
+    )
+    print(output)
+
+
 def ask(prompt: str, valid: list[str] = None) -> str:
     while True:
-        guess = input(prompt)
+        print_as_cow(prompt)
+        guess = input()
         if valid is not None and guess not in valid:
-            print('Invalid word')
+            print_as_cow('Invalid word')
         else:
             return guess
 
 
 def inform(format_string: str, bulls: int, cows: int) -> None:
-    print(format_string.format(bulls, cows))
+    print_as_cow(format_string.format(bulls, cows))
 
 
 def load_words(path: str, word_length: int) -> list[str]:

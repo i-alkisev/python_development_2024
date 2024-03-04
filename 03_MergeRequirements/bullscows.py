@@ -50,7 +50,7 @@ def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
     return guess_cnt
 
 
-def print_as_cow(message: str) -> None:
+def print_as_random_cow(message: str) -> None:
     output = cowsay.cowsay(
         message,
         cow=cowsay.get_random_cow()
@@ -58,18 +58,27 @@ def print_as_cow(message: str) -> None:
     print(output)
 
 
+def print_as_gpt_cow(message: str) -> None:
+    with open('gpt.cow', 'r') as f:
+        output = cowsay.cowsay(
+            message,
+            cowfile=cowsay.read_dot_cow(f)
+        )
+    print(output)
+
+
 def ask(prompt: str, valid: list[str] = None) -> str:
     while True:
-        print_as_cow(prompt)
+        print_as_gpt_cow(prompt)
         guess = input()
         if valid is not None and guess not in valid:
-            print_as_cow('Invalid word')
+            print_as_gpt_cow('Invalid word')
         else:
             return guess
 
 
 def inform(format_string: str, bulls: int, cows: int) -> None:
-    print_as_cow(format_string.format(bulls, cows))
+    print_as_random_cow(format_string.format(bulls, cows))
 
 
 def load_words(path: str, word_length: int) -> list[str]:
